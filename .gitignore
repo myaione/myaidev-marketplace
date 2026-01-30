@@ -1,4 +1,4 @@
-# Nestjs specific
+# Build output
 /dist
 /node_modules
 /build
@@ -11,7 +11,6 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
 
 # dotenv environment variable files
 .env
@@ -19,6 +18,22 @@ lerna-debug.log*
 .env.test
 .env.production
 
+# Database files
+db/*.sqlite
+db/*.sqlite-journal
+db/*.sqlite-wal
+
+# Upload storage
+uploads/*
+!uploads/.gitkeep
+
 # temp directory
 .temp
 .tmp
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+db/*.sqlite-shm

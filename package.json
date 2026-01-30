@@ -1,0 +1,30 @@
+{
+  "name": "myaidev-marketplace",
+  "version": "1.0.0",
+  "description": "MyAIDev Marketplace Backend API - Skill distribution platform",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "db:init": "tsx src/db/init.ts",
+    "db:seed": "tsx src/db/seed.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "MyAIDev",
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^4.10.3",
+    "better-sqlite3": "^12.5.0",
+    "zod": "^3.24.5",
+    "dotenv": "^17.2.3",
+    "@hono/node-server": "^1.19.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^22.15.0",
+    "@types/better-sqlite3": "^7.6.11",
+    "tsx": "^4.7.1"
+  }
+}
