@@ -1,0 +1,37 @@
+name: Validate Skill PR
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install validator dependencies
+        working-directory: scripts
+        run: npm install
+
+      - name: Detect changed skill
+        id: detect
+        run: |
+          CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'skills/' | head -1)
+          if [ -z "$CHANGED" ]; then
+            echo "No skill files changed"
+            exit 0
+          fi
+          SLUG=$(echo "$CHANGED" | cut -d'/' -f2)
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "Detected skill: $SLUG"
+
+      - name: Validate skill
+        if: steps.detect.outputs.slug
+        run: node scripts/validate.js "skills/${{ steps.detect.outputs.slug }}"

@@ -1,101 +1,57 @@
-# MyAIDev Marketplace API
+# MyAIDev Marketplace
 
-Backend API for the MyAIDev skill marketplace — browse, search, download, and manage AI development skills.
+Community-contributed skills for the [MyAIDev Method](https://github.com/myaione/myaidev-method) framework.
 
-## Tech Stack
+## What is this?
 
-- **Runtime**: Node.js + TypeScript
-- **Framework**: [Hono](https://hono.dev) (lightweight, fast)
-- **Database**: SQLite via [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)
-- **Validation**: [Zod](https://zod.dev)
+This repository is the **review layer** for skill contributions to the MyAIDev marketplace. Skills submitted here go through CI validation and admin review before being published to [dev.myai1.ai](https://dev.myai1.ai).
 
-## Quick Start
+## Contributing a Skill
+
+### Quick Path (Recommended)
+
+Use the CLI tool -- it handles everything:
 
 ```bash
-# Install dependencies
-npm install
+# Install the CLI
+npm install -g myaidev-method
 
-# Copy environment config
-cp .env.example .env
+# Log in
+myaidev-method login
 
-# Initialize database + seed data
-npm run db:init
-npm run db:seed
-
-# Start development server (hot reload)
-npm run dev
+# Submit a skill (will scaffold, validate, and create PR)
+myaidev-method addon submit
 ```
 
-The server runs at **http://localhost:3000**.
+### Manual Path
 
-## API Endpoints
+1. Fork this repository
+2. Create a new directory under `skills/` with your skill slug
+3. Add your `SKILL.md` file (see [CONTRIBUTING.md](CONTRIBUTING.md) for format)
+4. Open a pull request
 
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/v1/skills` | List skills (filtering, sorting, pagination) |
-| `GET` | `/api/v1/skills/:id` | Get skill details |
-| `POST` | `/api/v1/skills` | Create a new skill |
-| `PATCH` | `/api/v1/skills/:id` | Update a skill |
-| `DELETE` | `/api/v1/skills/:id` | Delete a skill |
-| `GET` | `/api/v1/skills/:id/download` | Download skill package |
-| `POST` | `/api/v1/skills/:id/star` | Star a skill |
-| `GET` | `/api/v1/categories` | List categories |
-| `GET` | `/api/v1/categories/:id` | Category details with skills |
-| `GET` | `/api/v1/search?q=` | Search skills |
-| `GET` | `/api/v1/stats` | Marketplace statistics |
-
-### Query Parameters (GET /api/v1/skills)
-
-| Param | Type | Description |
-|-------|------|-------------|
-| `category` | string | Filter by category ID |
-| `tag` | string | Filter by tag |
-| `verified` | boolean | Filter verified skills |
-| `featured` | boolean | Filter featured skills |
-| `sort` | string | Sort by: `name`, `stars`, `downloads`, `created_at`, `updated_at` |
-| `order` | string | `asc` or `desc` |
-| `limit` | number | Results per page (1-100, default 50) |
-| `offset` | number | Pagination offset |
-
-## Project Structure
+## Repository Structure
 
 ```
-├── src/
-│   ├── index.ts           # Server entry point
-│   ├── routes/            # API route handlers
-│   │   ├── skills.ts
-│   │   ├── categories.ts
-│   │   ├── search.ts
-│   │   └── stats.ts
-│   ├── db/                # Database layer
-│   │   ├── connection.ts
-│   │   ├── skills.ts
-│   │   ├── categories.ts
-│   │   ├── init.ts
-│   │   └── seed.ts
-│   ├── middleware/         # Middleware
-│   │   └── error-handler.ts
-│   └── types/             # TypeScript types & Zod schemas
-│       └── skill.ts
-├── db/
-│   ├── schema.sql         # Database schema
-│   └── migrations/        # Future migrations
-├── uploads/               # Skill package storage
-├── public/                # Static files
-└── .env.example
+skills/                          # Approved skills (one directory per skill)
+  my-skill/
+    SKILL.md                     # Skill definition (YAML frontmatter + markdown)
+.github/
+  workflows/
+    validate-skill-pr.yml        # CI validation on pull requests
+    ingest-on-merge.yml          # Auto-publish to marketplace on merge
+scripts/
+  validate.js                   # Validation script used by CI
 ```
 
-## Scripts
+## Review Process
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start dev server with hot reload |
-| `npm run build` | Compile TypeScript |
-| `npm start` | Run compiled JS |
-| `npm run db:init` | Initialize database schema |
-| `npm run db:seed` | Seed with default data |
-| `npm run typecheck` | Type-check without emitting |
+1. **Submit** -- Create a PR with your skill in `skills/{slug}/SKILL.md`
+2. **CI Validation** -- Automated checks run on your PR
+3. **Admin Review** -- A maintainer reviews your skill
+4. **Merge** -- Once approved, your skill is merged and auto-published
+5. **Available** -- Your skill appears in `myaidev-method addon list`
 
 ## License
 
-MIT
+Apache-2.0

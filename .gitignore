@@ -1,39 +1,19 @@
-# Build output
-/dist
-/node_modules
-/build
-/tmp
+# Dependencies
+node_modules/
 
 # Logs
-logs
 *.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# dotenv environment variable files
-.env
-.env.development
-.env.test
-.env.production
-
-# Database files
-db/*.sqlite
-db/*.sqlite-journal
-db/*.sqlite-wal
-
-# Upload storage
-uploads/*
-!uploads/.gitkeep
-
-# temp directory
-.temp
-.tmp
 
 # IDE
 .vscode
 .idea
 *.swp
 *.swo
-db/*.sqlite-shm
+
+# Temp
+.temp
+.tmp
+
+# OS
+.DS_Store
+Thumbs.db

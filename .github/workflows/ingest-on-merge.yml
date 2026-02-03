@@ -1,0 +1,53 @@
+name: Ingest Skill on Merge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect merged skill
+        id: detect
+        run: |
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- 'skills/' | head -1)
+          if [ -z "$CHANGED" ]; then
+            echo "No skill files changed"
+            exit 0
+          fi
+          SLUG=$(echo "$CHANGED" | cut -d'/' -f2)
+          echo "slug=$SLUG" >> $GITHUB_OUTPUT
+          echo "Detected merged skill: $SLUG"
+
+      - name: Read skill content
+        if: steps.detect.outputs.slug
+        id: content
+        run: |
+          SKILL_PATH="skills/${{ steps.detect.outputs.slug }}/SKILL.md"
+          if [ ! -f "$SKILL_PATH" ]; then
+            echo "SKILL.md not found at $SKILL_PATH"
+            exit 1
+          fi
+          # Base64 encode to safely pass multiline content
+          CONTENT=$(base64 -w 0 "$SKILL_PATH")
+          echo "content=$CONTENT" >> $GITHUB_OUTPUT
+
+      - name: Ingest to marketplace API
+        if: steps.detect.outputs.slug
+        run: |
+          DECODED=$(echo "${{ steps.content.outputs.content }}" | base64 -d)
+          curl -f -X POST "${{ secrets.MARKETPLACE_API_URL }}/api/skills/ingest" \
+            -H "X-Webhook-Secret: ${{ secrets.WEBHOOK_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n \
+              --arg slug "${{ steps.detect.outputs.slug }}" \
+              --arg content "$DECODED" \
+              --arg source "marketplace-pr" \
+              '{slug: $slug, content: $content, source: $source}')"
