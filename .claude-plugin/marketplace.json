@@ -1,0 +1,13 @@
+{
+  "name": "myaidev-marketplace",
+  "owner": {
+    "name": "MyAIDev",
+    "email": "plugins@openmy.ai"
+  },
+  "metadata": {
+    "description": "Community skills for AI-assisted development, security testing, content creation, and deployment",
+    "version": "1.0.0",
+    "pluginRoot": "./skills"
+  },
+  "plugins": []
+}
