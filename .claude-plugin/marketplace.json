@@ -9,5 +9,28 @@
     "version": "1.0.0",
     "pluginRoot": "./skills"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "myaidev-method",
+      "source": {
+        "source": "github",
+        "repo": "myaione/myaidev-method"
+      },
+      "description": "Complete AI development framework with SPARC methodology, content creation, multi-platform publishing, visual generation, security testing, and infrastructure management",
+      "version": "1.0.0",
+      "author": {
+        "name": "Samuel Mukoti",
+        "email": "samuelm@openmy.ai"
+      },
+      "homepage": "https://dev.myai1.ai/plugins/myaidev-method",
+      "repository": "https://github.com/myaione/myaidev-method",
+      "license": "MIT",
+      "keywords": [
+        "sparc", "content-creation", "wordpress", "visual-generation",
+        "security-testing", "openstack", "coolify", "devops",
+        "publishing", "ai-agents"
+      ],
+      "category": "development"
+    }
+  ]
 }
